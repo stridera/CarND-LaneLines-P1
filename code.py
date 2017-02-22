@@ -152,22 +152,22 @@ def draw_lines(img, lines, color=[255, 0, 0], thickness=5):
     if (right_bottom_x > 0 and right_top_x < img.shape[1]):
         cv2.line(img, (int(right_bottom_x), img.shape[0]), (int(right_top_x), int(img.shape[0]*img_shape_length)), color, thickness)
 
-    left_average_tmp = np.average(left_slopes)
+    left_slope_average_tmp = np.average(left_slopes)
     left_int_average_tmp = np.average(left_ints)
-    print("{} - {}".format(left_average_tmp, left_int_average_tmp))
-    if (left_average_tmp < 0 and left_int_average_tmp > 0):
+    # print("{} - {}".format(left_slope_average_tmp, left_int_average_tmp))
+    if (left_slope_average_tmp < 0 and left_int_average_tmp > 0):
         if (len(left_slopes_slide) < slide_length):
-            left_slopes_slide.append(left_average_tmp)
+            left_slopes_slide.append(left_slope_average_tmp)
             left_ints_slide.append(left_int_average_tmp)
         else:  
-            left_slopes_slide[frame % slide_length] = left_average_tmp
+            left_slopes_slide[frame % slide_length] = left_slope_average_tmp
             left_ints_slide[frame % slide_length] = left_int_average_tmp
 
-    left_average = np.average(left_slopes_slide)
+    left_slope_average = np.average(left_slopes_slide)
     left_int_average = np.average(left_ints_slide)
 
-    left_top_x = (img.shape[0] - left_int_average) / left_average
-    left_bottom_x = ((img.shape[0] * img_shape_length) - left_int_average) / left_average
+    left_top_x = (img.shape[0] - left_int_average) / left_slope_average
+    left_bottom_x = ((img.shape[0] * img_shape_length) - left_int_average) / left_slope_average
     
     if (left_bottom_x > 0 and left_top_x < img.shape[1]):
         cv2.line(img, (int(left_top_x), img.shape[0]), (int(left_bottom_x), int(img.shape[0]*img_shape_length)), [0,255,255], thickness)
